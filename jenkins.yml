@@ -1,0 +1,31 @@
+---
+- hosts: app
+  tasks:
+    - name: install wget 
+      yum: name=wget state=present
+
+    - name: install java
+      yum : name=java state=latest
+
+    - name: download jenkins
+      command: wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+    - name: Import Jenkins key
+      rpm_key: key=https://jenkins-ci.org/redhat/jenkins-ci.org.key state=present
+
+    - name: Install Jenkins
+      package: name=jenkins state=latest
+
+    - name: Allow port 8080
+      shell: iptables -I INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT 
+
+    - name: start jenkins
+      systemd: name=jenkins state=started
+  
+    - name: enable jenkins
+      systemd: name=jenkins enabled=true
+
+
+   # - name: init password jenkins
+    #  shell: cat /var/lib/jenkins/secrets/initialAdminPassword change_when=false register=result
+   # - name: print init password jenkins
+    #  debulg: var=result.stdout
