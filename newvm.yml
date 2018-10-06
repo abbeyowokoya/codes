@@ -1,0 +1,15 @@
+---
+- hosts: 127.0.0.1
+  tasks:
+    - name: create new vm from template
+      vmware_guest:
+        hostname: 192.168.0.102
+        username: administrator@vsphere.local
+        password: reset4U$
+        validate_certs: False
+        name: jenkins-server
+        template: Template-Server
+        datacenter: Datacenter1
+        folder: template_folder
+        state: poweredon
+        wait_for_ip_address: yes
