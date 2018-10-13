@@ -10,6 +10,6 @@
         name: jenkins-server
         template: Template-Server
         datacenter: Datacenter1
-        folder: template_folder
+        folder: "/"  
         state: poweredon
         wait_for_ip_address: yes
