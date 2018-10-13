@@ -3,7 +3,7 @@
   tasks:
     - name: create new vm from template
       vmware_guest:
-        hostname: 192.168.0.102
+        hostname: 192.168.0.103
         username: administrator@vsphere.local
         password: reset4U$
         validate_certs: False
