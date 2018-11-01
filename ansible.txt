@@ -1,0 +1,3 @@
+#this is how to run the newvm.yml
+
+ansible-playbook newvm.yml  --extra-vars 'machine_name=PUT THE NAME OF ANY MACHINE YOU WANT IN THE CULUM'
