@@ -13,3 +13,11 @@
         folder: "/"  
         state: poweredon
         wait_for_ip_address: yes
+     
+    - name: Set authorized key for root user copying it from current user
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}" 
+        tag: key
+      
