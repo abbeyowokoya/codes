@@ -1,0 +1,44 @@
+---
+- hosts: splunk
+  become: yes
+  tasks: 
+    - name: Upload splunk installation file
+      copy:
+       src: "/apps/splunk-7.3.1.1-7651b7244cf2-linux-2.6-x86_64.rpm"
+       dest: /home/ansible
+
+    - name: Splunk Master Installation 
+      yum:
+       name: /home/ansible/splunk-7.3.1.1-7651b7244cf2-linux-2.6-x86_64.rpm
+       state: present
+
+    - name: Create systemd start up script
+      template:
+        src: /home/ansible/splunk/roles/splunk/templates/splunk.j2 
+        dest: /usr/lib/systemd/system/splunk.service
+        mode: 755
+        #owner: splunk
+        #group: splunk
+
+    - name: Start Splunk service, Accept Lisence and Enable splunk from boot
+      systemd:
+        name: splunk
+        state: started
+        enabled: yes
+
+    - name: Create a user-seed.conf file
+      file: path=/opt/splunk/etc/system/local/user-seed.conf state=touch owner=root group=root mode=0644    
+
+    - name: creating passwd for splunk
+      template:
+        src: "/home/ansible/splunk/roles/splunk/templates/splunk-creds.j2"
+        dest: "/opt/splunk/etc/system/local/user-seed.conf"
+
+        #  - name: opening port 8000 splunk web
+        #firewalld:
+        #port: 8000/tcp
+        #permanent: yes
+        #state: enabled  
+
+    - name: remove splunk rpm file
+      file: path=/apps/splunk-7.3.1.1-7651b7244cf2-linux-2.6-x86_64.rpm state=absent
